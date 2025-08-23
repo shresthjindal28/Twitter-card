@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 import axios from "axios";
 
 const TWITTER_URL = "https://api.twitter.com/2/users/by/username/";
-const CACHE_TTL_MS = 60 * 1000; // 60s cache
+const CACHE_TTL_MS = 60 * 1000;
 const MAX_RETRIES = 2;
 
-// In-memory caches
-const cache = new Map<string, { data: unknown; expiresAt: number }>();
+const cache = new Map<string, { data: TwitterUserResponse; expiresAt: number }>();
 const inflight = new Map<string, Promise<TwitterUserResponse>>();
 
 function sleep(ms: number) {
@@ -15,10 +15,8 @@ function sleep(ms: number) {
 
 function toHighResImageUrl(url: string) {
   try {
-    // Most Twitter profile images include a size suffix like _normal.jpg
-    // Replace _normal with _400x400 to request a higher-resolution avatar.
-    return url.replace(/_normal(\.(jpg|jpeg|png))/i, '_400x400$1');
-  } catch (err) {
+    return url.replace(/_normal(\.(jpg|jpeg|png))/i, "_400x400$1");
+  } catch {
     return url;
   }
 }
@@ -45,17 +43,14 @@ async function fetchTwitterUser(username: string, token: string, attempt = 0): P
   try {
     const res = await axios.get(
       `${TWITTER_URL}${username}?user.fields=profile_image_url,description,location,public_metrics`,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
+      { headers: { Authorization: `Bearer ${token}` } }
     );
     return res.data;
   } catch (err) {
     if (axios.isAxiosError(err)) {
       const status = err.response?.status;
       if (status === 429 && attempt < MAX_RETRIES) {
-        const wait = 500 * Math.pow(2, attempt);
-        await sleep(wait);
+        await sleep(500 * Math.pow(2, attempt));
         return fetchTwitterUser(username, token, attempt + 1);
       }
       throw err;
@@ -64,12 +59,12 @@ async function fetchTwitterUser(username: string, token: string, attempt = 0): P
   }
 }
 
-// ✅ Correct App Router signature: /api/twitter/[username]/route.ts
 export async function GET(
-  req: Request,
-  { params }: { params: { username: string } }
+  req: NextRequest,
+  { params }: { params: Promise<{ username: string }> }
 ) {
-  const username = params.username;
+  const { username } = await params;
+
   if (!username) {
     return NextResponse.json({ error: "Missing username" }, { status: 400 });
   }
@@ -82,7 +77,6 @@ export async function GET(
     );
   }
 
-  // Serve from cache if fresh
   const cached = cache.get(username);
   if (cached && cached.expiresAt > Date.now()) {
     return NextResponse.json(cached.data);
@@ -102,18 +96,16 @@ export async function GET(
       }
     }
 
-    // Convert profile image URL to higher-resolution variant when present
-    if (data && data.data && data.data.profile_image_url) {
-      try {
-        // mutate a shallow copy to avoid surprising callers
-        const copied = { ...data, data: { ...data.data, profile_image_url: toHighResImageUrl(data.data.profile_image_url) } };
-        data = copied as TwitterUserResponse;
-      } catch {
-        // ignore transformation errors and keep original URL
-      }
+    if (data?.data?.profile_image_url) {
+      data = {
+        ...data,
+        data: {
+          ...data.data,
+          profile_image_url: toHighResImageUrl(data.data.profile_image_url),
+        },
+      };
     }
 
-    // Cache success
     cache.set(username, { data, expiresAt: Date.now() + CACHE_TTL_MS });
 
     return NextResponse.json(data);
