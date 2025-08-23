@@ -78,19 +78,19 @@ export default function TwitterCard({ username, onBack }: TwitterCardProps) {
 
   if (isLoading) {
     return (
-      <div className="text-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-        <p className="text-gray-600">Loading profile...</p>
+      <div className="text-center p-4 sm:p-6 md:p-8">
+        <div className="animate-spin rounded-full h-8 w-8 sm:h-10 sm:w-10 md:h-12 md:w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+        <p className="text-gray-600 text-sm sm:text-base">Loading profile...</p>
       </div>
     );
   }
 
   if (!user) {
     return (
-      <div className="text-center p-8">
+      <div className="text-center p-4 sm:p-6 md:p-8 max-w-md mx-auto">
         <div className="text-red-500 mb-4">
           <svg
-            className="w-16 h-16 mx-auto mb-4"
+            className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 mx-auto mb-4"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -103,16 +103,16 @@ export default function TwitterCard({ username, onBack }: TwitterCardProps) {
             />
           </svg>
         </div>
-        <h3 className="text-xl font-semibold text-gray-800 mb-2">
+        <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-2">
           Profile Not Found
         </h3>
-        <p className="text-gray-600 mb-6">
+        <p className="text-gray-600 mb-4 sm:mb-6 text-sm sm:text-base px-2">
           The username &ldquo;{username}&rdquo; could not be found or is
           private.
         </p>
         <button
           onClick={onBack}
-          className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+          className="px-4 py-2 sm:px-6 sm:py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition text-sm sm:text-base"
         >
           Try Another Username
         </button>
@@ -121,15 +121,15 @@ export default function TwitterCard({ username, onBack }: TwitterCardProps) {
   }
 
   return (
-    <div className="w-full max-w-2xl mx-auto space-y-6">
+    <div className="w-full max-w-2xl mx-auto space-y-3 xs:space-y-4 md:space-y-6 px-3 xs:px-4 sm:px-0">
       {/* Header with Back Button */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-row items-center justify-between gap-2 xs:gap-3 sm:gap-4">
         <button
           onClick={onBack}
-          className="flex items-center space-x-2 text-gray-600 hover:text-gray-800 transition"
+          className="flex items-center space-x-1 xs:space-x-2 text-gray-600 hover:text-gray-800 transition-colors duration-200 p-1 xs:p-1.5 sm:p-2 rounded-md hover:bg-gray-100"
         >
           <svg
-            className="w-5 h-5"
+            className="w-3.5 h-3.5 xs:w-4 xs:h-4 sm:w-5 sm:h-5 flex-shrink-0"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -141,23 +141,24 @@ export default function TwitterCard({ username, onBack }: TwitterCardProps) {
               d="M15 19l-7-7 7-7"
             />
           </svg>
-          <span>Back to Search</span>
+          <span className="text-xs xs:text-sm sm:text-base font-medium whitespace-nowrap">Back</span>
         </button>
 
         <button
           onClick={downloadCard}
           disabled={isDownloading}
-          className="flex items-center space-x-2 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition disabled:opacity-50 disabled:cursor-not-allowed"
+          className="flex items-center space-x-1 xs:space-x-2 px-2 py-1.5 xs:px-3 xs:py-2 sm:px-4 sm:py-2 bg-green-500 text-white rounded-md xs:rounded-lg hover:bg-green-600 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-xs xs:text-sm sm:text-base font-medium shadow-sm hover:shadow-md"
         >
           {isDownloading ? (
             <>
-              <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-              <span>Downloading...</span>
+              <div className="w-3 h-3 xs:w-3.5 xs:h-3.5 sm:w-4 sm:h-4 border-2 border-white border-t-transparent rounded-full animate-spin flex-shrink-0"></div>
+              <span className="hidden xs:inline">Downloading...</span>
+              <span className="xs:hidden">...</span>
             </>
           ) : (
             <>
               <svg
-                className="w-4 h-4"
+                className="w-3 h-3 xs:w-3.5 xs:h-3.5 sm:w-4 sm:h-4 flex-shrink-0"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -169,7 +170,7 @@ export default function TwitterCard({ username, onBack }: TwitterCardProps) {
                   d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                 />
               </svg>
-              <span>Download Card</span>
+              <span className="hidden xs:inline">Download</span>
             </>
           )}
         </button>
@@ -178,35 +179,32 @@ export default function TwitterCard({ username, onBack }: TwitterCardProps) {
       {/* Twitter Card */}
       <div
         ref={cardRef}
-        className="relative max-w-md mx-auto  shadow-2xl overflow-hidden border border-gray-100"
+        className="relative w-full max-w-sm sm:max-w-md mx-auto shadow-2xl overflow-hidden border border-gray-100"
       >
-        
-          {/* Emerald Depths Background with Top Glow */}
-          <div
-            className="absolute inset-0 z-0"
-            style={{
-              background:
-                "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(16, 185, 129, 0.25), transparent 70%), #000000",
-            }}
-          />
-
-         
+        {/* Emerald Depths Background with Top Glow */}
+        <div
+          className="absolute inset-0 z-0"
+          style={{
+            background:
+              "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(16, 185, 129, 0.25), transparent 70%), #000000",
+          }}
+        />
 
         {/* Content (white surface sits above the radial background) */}
-        <div className="relative p-8   m-6">
+        <div className="relative p-4 sm:p-6 md:p-8 m-3 sm:m-4 md:m-6">
           {/* Profile Section */}
-          <div className="text-center mb-6">
-            <div className="relative inline-block mb-4">
+          <div className="text-center mb-4 sm:mb-6">
+            <div className="relative inline-block mb-3 sm:mb-4">
               <Image
                 src={user.profile_image_url}
                 alt={user.name}
                 width={96}
                 height={96}
-                className="w-24 h-24 rounded-full border-4 border-white shadow-lg"
+                className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-full border-4 border-white shadow-lg"
               />
-              <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+              <div className="absolute -bottom-1 -right-1 sm:-bottom-2 sm:-right-2 w-6 h-6 sm:w-8 sm:h-8 bg-blue-500 rounded-full flex items-center justify-center">
                 <svg
-                  className="w-4 h-4 text-white"
+                  className="w-3 h-3 sm:w-4 sm:h-4 text-white"
                   fill="currentColor"
                   viewBox="0 0 24 24"
                 >
@@ -215,21 +213,21 @@ export default function TwitterCard({ username, onBack }: TwitterCardProps) {
               </div>
             </div>
 
-            <h2 className="text-2xl font-bold text-slate-300 mb-1">
+            <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-slate-300 mb-1">
               {user.name}
             </h2>
-            <p className="text-blue-400 font-medium mb-3">@{user.username}</p>
+            <p className="text-blue-400 font-medium mb-2 sm:mb-3 text-sm sm:text-base">@{user.username}</p>
 
             {user.description && (
-              <p className="text-gray-200 text-sm leading-relaxed mb-3 max-w-xs mx-auto">
+              <p className="text-gray-200 text-xs sm:text-sm leading-relaxed mb-2 sm:mb-3 max-w-xs mx-auto px-2">
                 {user.description}
               </p>
             )}
 
             {user.location && (
-              <div className="flex items-center justify-center text-gray-300 text-sm">
+              <div className="flex items-center justify-center text-gray-300 text-xs sm:text-sm">
                 <svg
-                  className="w-4 h-4 mr-1"
+                  className="w-3 h-3 sm:w-4 sm:h-4 mr-1"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -253,38 +251,38 @@ export default function TwitterCard({ username, onBack }: TwitterCardProps) {
           </div>
 
           {/* Stats Section */}
-          <div className="grid grid-cols-3 gap-4 text-center">
-            <div className="bg-white/50 backdrop-blur-sm rounded-2xl p-4 border border-white/20">
-              <div className="text-2xl font-bold text-white mb-1">
+          <div className="grid grid-cols-3 gap-1.5 xs:gap-2 sm:gap-3 md:gap-4 lg:gap-6 text-center">
+            <div className="bg-white/50 backdrop-blur-sm rounded-md xs:rounded-lg sm:rounded-xl md:rounded-2xl p-1.5 xs:p-2 sm:p-3 md:p-4 lg:p-5 border border-white/20 min-h-[60px] xs:min-h-[70px] sm:min-h-[80px] md:min-h-[90px] flex flex-col justify-center">
+              <div className="text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl font-bold text-white mb-0.5 xs:mb-1 leading-tight">
                 {formatNumber(user.public_metrics.followers_count)}
               </div>
-              <div className="text-xs text-gray-300 font-medium uppercase tracking-wide">
+              <div className="text-[8px] xs:text-[9px] sm:text-[10px] md:text-xs lg:text-sm text-gray-300 font-medium uppercase tracking-wide leading-tight">
                 Followers
               </div>
             </div>
 
-            <div className="bg-white/50 backdrop-blur-sm rounded-2xl p-4 border border-white/20">
-              <div className="text-2xl font-bold text-white mb-1">
+            <div className="bg-white/50 backdrop-blur-sm rounded-md xs:rounded-lg sm:rounded-xl md:rounded-2xl p-1.5 xs:p-2 sm:p-3 md:p-4 lg:p-5 border border-white/20 min-h-[60px] xs:min-h-[70px] sm:min-h-[80px] md:min-h-[90px] flex flex-col justify-center">
+              <div className="text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl font-bold text-white mb-0.5 xs:mb-1 leading-tight">
                 {formatNumber(user.public_metrics.following_count)}
               </div>
-              <div className="text-xs text-gray-300 font-medium uppercase tracking-wide">
+              <div className="text-[8px] xs:text-[9px] sm:text-[10px] md:text-xs lg:text-sm text-gray-300 font-medium uppercase tracking-wide leading-tight">
                 Following
               </div>
             </div>
 
-            <div className="bg-white/50 backdrop-blur-sm rounded-2xl p-4 border border-white/20">
-              <div className="text-2xl font-bold text-white mb-1">
+            <div className="bg-white/50 backdrop-blur-sm rounded-md xs:rounded-lg sm:rounded-xl md:rounded-2xl p-1.5 xs:p-2 sm:p-3 md:p-4 lg:p-5 border border-white/20 min-h-[60px] xs:min-h-[70px] sm:min-h-[80px] md:min-h-[90px] flex flex-col justify-center">
+              <div className="text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl font-bold text-white mb-0.5 xs:mb-1 leading-tight">
                 {formatNumber(user.public_metrics.tweet_count)}
               </div>
-              <div className="text-xs text-gray-300 font-medium uppercase tracking-wide">
+              <div className="text-[8px] xs:text-[9px] sm:text-[10px] md:text-xs lg:text-sm text-gray-300 font-medium uppercase tracking-wide leading-tight">
                 Tweets
               </div>
             </div>
           </div>
 
           {/* Branding */}
-          <div className="mt-6 text-center">
-            <div className="text-xs text-gray-400 font-medium">
+          <div className="mt-4 sm:mt-6 text-center">
+            <div className="text-[10px] sm:text-xs text-gray-400 font-medium">
               Created with ❤️ by Shresth
             </div>
           </div>

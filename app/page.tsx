@@ -29,7 +29,7 @@ export default function Home() {
     <main className="min-h-screen">
       {/* Input Page */}
       {appState === 'input' && (
-        <div className="min-h-screen flex items-center justify-center p-6">
+        <div className="min-h-screen flex items-center justify-center p-3 sm:p-4 md:p-6">
           <div className="w-full max-w-4xl">
             <UsernameInput onSubmit={handleUsernameSubmit} />
           </div>
@@ -41,7 +41,7 @@ export default function Home() {
 
       {/* Card Page */}
       {appState === 'card' && username && (
-        <div className="min-h-screen flex items-center justify-center p-6">
+        <div className="min-h-screen flex items-center justify-center p-3 sm:p-4 md:p-6">
           <TwitterCard username={username} onBack={handleBackToInput} />
         </div>
       )}
