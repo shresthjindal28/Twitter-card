@@ -121,9 +121,9 @@ export default function TwitterCard({ username, onBack }: TwitterCardProps) {
   }
 
   return (
-    <div className="w-full max-w-2xl mx-auto space-y-3 xs:space-y-4 md:space-y-6 px-3 xs:px-4 sm:px-0">
+    <div className="w-full max-w-5xl mx-auto space-y-3 xs:space-y-4 md:space-y-6 px-3 xs:px-4 sm:px-0">
       {/* Header with Back Button */}
-      <div className="flex flex-row items-center justify-between gap-2 xs:gap-3 sm:gap-4">
+      <div className="flex flex-row items-center justify-start gap-2 xs:gap-3 sm:gap-4">
         <button
           onClick={onBack}
           className="flex items-center space-x-1 xs:space-x-2 text-gray-600 hover:text-gray-800 transition-colors duration-200 p-1 xs:p-1.5 sm:p-2 rounded-md hover:bg-gray-100"
@@ -143,44 +143,15 @@ export default function TwitterCard({ username, onBack }: TwitterCardProps) {
           </svg>
           <span className="text-xs xs:text-sm sm:text-base font-medium whitespace-nowrap">Back</span>
         </button>
-
-        <button
-          onClick={downloadCard}
-          disabled={isDownloading}
-          className="flex items-center space-x-1 xs:space-x-2 px-2 py-1.5 xs:px-3 xs:py-2 sm:px-4 sm:py-2 bg-green-500 text-white rounded-md xs:rounded-lg hover:bg-green-600 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-xs xs:text-sm sm:text-base font-medium shadow-sm hover:shadow-md"
-        >
-          {isDownloading ? (
-            <>
-              <div className="w-3 h-3 xs:w-3.5 xs:h-3.5 sm:w-4 sm:h-4 border-2 border-white border-t-transparent rounded-full animate-spin flex-shrink-0"></div>
-              <span className="hidden xs:inline">Downloading...</span>
-              <span className="xs:hidden">...</span>
-            </>
-          ) : (
-            <>
-              <svg
-                className="w-3 h-3 xs:w-3.5 xs:h-3.5 sm:w-4 sm:h-4 flex-shrink-0"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                />
-              </svg>
-              <span className="hidden xs:inline">Download</span>
-            </>
-          )}
-        </button>
       </div>
 
-      {/* Twitter Card */}
-      <div
-        ref={cardRef}
-        className="relative w-full max-w-sm sm:max-w-md mx-auto shadow-2xl overflow-hidden border border-gray-100"
-      >
+      {/* Card and Download Button Layout */}
+      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-center gap-6 lg:gap-8">
+        {/* Twitter Card */}
+        <div
+          ref={cardRef}
+          className="relative w-full max-w-sm sm:max-w-md mx-auto lg:mx-0 shadow-2xl overflow-hidden"
+        >
         {/* Emerald Depths Background with Top Glow */}
         <div
           className="absolute inset-0 z-0"
@@ -200,7 +171,7 @@ export default function TwitterCard({ username, onBack }: TwitterCardProps) {
                 alt={user.name}
                 width={96}
                 height={96}
-                className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-full border-4 border-white shadow-lg"
+                className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-full shadow-lg"
               />
               <div className="absolute -bottom-1 -right-1 sm:-bottom-2 sm:-right-2 w-6 h-6 sm:w-8 sm:h-8 bg-blue-500 rounded-full flex items-center justify-center">
                 <svg
@@ -250,43 +221,109 @@ export default function TwitterCard({ username, onBack }: TwitterCardProps) {
             )}
           </div>
 
-          {/* Stats Section */}
-          <div className="grid grid-cols-3 gap-1.5 xs:gap-2 sm:gap-3 md:gap-4 lg:gap-6 text-center">
-            <div className="bg-white/50 backdrop-blur-sm rounded-md xs:rounded-lg sm:rounded-xl md:rounded-2xl p-1.5 xs:p-2 sm:p-3 md:p-4 lg:p-5 border border-white/20 min-h-[60px] xs:min-h-[70px] sm:min-h-[80px] md:min-h-[90px] flex flex-col justify-center">
-              <div className="text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl font-bold text-white mb-0.5 xs:mb-1 leading-tight">
+          {/* Stats Section - Responsive, no border boxes */}
+          <div className="flex flex-row justify-center items-center gap-4 xs:gap-6 sm:gap-8 md:gap-10 lg:gap-12 w-full py-2 sm:py-3 md:py-4">
+            {/* Followers */}
+            <div className="flex flex-col items-center justify-center">
+              
+              <div className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-white leading-tight">
                 {formatNumber(user.public_metrics.followers_count)}
               </div>
-              <div className="text-[8px] xs:text-[9px] sm:text-[10px] md:text-xs lg:text-sm text-gray-300 font-medium uppercase tracking-wide leading-tight">
+              <div className="text-xs sm:text-sm text-gray-300 font-medium uppercase tracking-wide leading-tight mt-0.5">
                 Followers
               </div>
             </div>
 
-            <div className="bg-white/50 backdrop-blur-sm rounded-md xs:rounded-lg sm:rounded-xl md:rounded-2xl p-1.5 xs:p-2 sm:p-3 md:p-4 lg:p-5 border border-white/20 min-h-[60px] xs:min-h-[70px] sm:min-h-[80px] md:min-h-[90px] flex flex-col justify-center">
-              <div className="text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl font-bold text-white mb-0.5 xs:mb-1 leading-tight">
+            {/* Following */}
+            <div className="flex flex-col items-center justify-center">
+              
+              <div className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-white leading-tight">
                 {formatNumber(user.public_metrics.following_count)}
               </div>
-              <div className="text-[8px] xs:text-[9px] sm:text-[10px] md:text-xs lg:text-sm text-gray-300 font-medium uppercase tracking-wide leading-tight">
+              <div className="text-xs sm:text-sm text-gray-300 font-medium uppercase tracking-wide leading-tight mt-0.5">
                 Following
               </div>
             </div>
 
-            <div className="bg-white/50 backdrop-blur-sm rounded-md xs:rounded-lg sm:rounded-xl md:rounded-2xl p-1.5 xs:p-2 sm:p-3 md:p-4 lg:p-5 border border-white/20 min-h-[60px] xs:min-h-[70px] sm:min-h-[80px] md:min-h-[90px] flex flex-col justify-center">
-              <div className="text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl font-bold text-white mb-0.5 xs:mb-1 leading-tight">
+            {/* Tweets */}
+            <div className="flex flex-col items-center justify-center">
+              
+              <div className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-white leading-tight">
                 {formatNumber(user.public_metrics.tweet_count)}
               </div>
-              <div className="text-[8px] xs:text-[9px] sm:text-[10px] md:text-xs lg:text-sm text-gray-300 font-medium uppercase tracking-wide leading-tight">
+              <div className="text-xs sm:text-sm text-gray-300 font-medium uppercase tracking-wide leading-tight mt-0.5">
                 Tweets
               </div>
             </div>
           </div>
-
-          {/* Branding */}
-          <div className="mt-4 sm:mt-6 text-center">
-            <div className="text-[10px] sm:text-xs text-gray-400 font-medium">
-              Created with ❤️ by Shresth
-            </div>
-          </div>
         </div>
+        </div>
+
+        {/* Download Button - Desktop: Right side (hidden on mobile) */}
+        <div className="hidden lg:flex flex-col items-center justify-center">
+          <button
+            onClick={downloadCard}
+            disabled={isDownloading}
+            className="flex gap-4 items-center px-6 py-4 bg-green-500 text-white rounded-xl hover:bg-green-600 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed font-medium shadow-lg hover:shadow-xl min-w-[140px] md:min-w-[220px]"
+          >
+            {isDownloading ? (
+              <>
+                <div className="w-8 h-8 border-3 border-white border-t-transparent rounded-full animate-spin"></div>
+                <span className="text-sm">Downloading...</span>
+              </>
+            ) : (
+              <>
+                <svg
+                  className="w-8 h-8"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                  />
+                </svg>
+                <span className="text-base">Download Card</span>
+              </>
+            )}
+          </button>
+        </div>
+      </div>
+
+      {/* Download Button - Mobile: Below card */}
+      <div className="lg:hidden flex justify-center">
+        <button
+          onClick={downloadCard}
+          disabled={isDownloading}
+          className="flex items-center space-x-2 px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-base font-medium shadow-lg hover:shadow-xl"
+        >
+          {isDownloading ? (
+            <>
+              <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+              <span>Downloading...</span>
+            </>
+          ) : (
+            <>
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                />
+              </svg>
+              <span>Download Card</span>
+            </>
+          )}
+        </button>
       </div>
     </div>
   );

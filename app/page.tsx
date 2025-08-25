@@ -41,7 +41,7 @@ export default function Home() {
 
       {/* Card Page */}
       {appState === 'card' && username && (
-        <div className="min-h-screen flex items-center justify-center p-3 sm:p-4 md:p-6">
+        <div className="h-screen flex items-center justify-center p-3 sm:p-4 md:p-6">
           <TwitterCard username={username} onBack={handleBackToInput} />
         </div>
       )}
