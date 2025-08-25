@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Navbar from "@/components/navbar";
+import { Analytics } from "@vercel/analytics/next"
 import "./globals.css";
 
 const siteUrl = "https://twitter-card.shresthjindal.com";
@@ -105,6 +106,7 @@ export default function RootLayout({
         <main className="flex justify-center items-start p-3 sm:p-4 md:p-6">
           <Navbar />
           {children}
+          <Analytics />
         </main>
       </body>
     </html>
